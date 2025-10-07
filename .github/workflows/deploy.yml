@@ -20,7 +20,7 @@ jobs:
           node-version: 24
 
       - name: Install dependencies
-        run: npx pnpm --frozen-lockfile
+        run: npx pnpm
 
       - name: Build the project
         run: npx pnpm build
