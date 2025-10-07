@@ -20,10 +20,10 @@ jobs:
           node-version: 24
 
       - name: Install dependencies
-        run: pnpm --frozen-lockfile
+        run: npx pnpm --frozen-lockfile
 
       - name: Build the project
-        run: pnpm build
+        run: npx pnpm build
 
       # 3️⃣ ارسال به VPS
       - name: Deploy to VPS
