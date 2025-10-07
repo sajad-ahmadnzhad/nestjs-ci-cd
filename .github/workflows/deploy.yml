@@ -33,7 +33,8 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd nestjs-ci/cd
+            cd nestjs-ci-cd
             git pull origin main
-            pm2 restart nestjs-ci/cd
+            npx pnpm build
+            npx pm2 restart 0
 
