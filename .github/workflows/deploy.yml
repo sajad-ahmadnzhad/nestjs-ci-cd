@@ -20,7 +20,7 @@ jobs:
           node-version: 24
 
       - name: Install dependencies
-        run: npx pnpm
+        run: npx pnpm install
 
       - name: Build the project
         run: npx pnpm build
