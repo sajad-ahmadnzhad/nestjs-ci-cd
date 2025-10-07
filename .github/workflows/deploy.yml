@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]  # وقتی روی main پوش شد اجرا کن
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
@@ -13,7 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ تست ساده برای اطمینان از صحت build
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -25,7 +24,6 @@ jobs:
       - name: Build the project
         run: npx pnpm build
 
-      # 3️⃣ ارسال به VPS
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
