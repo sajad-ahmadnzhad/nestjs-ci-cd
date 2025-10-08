@@ -11,24 +11,30 @@ ENV_FILES=(".env" ".env.docker")
 echo "🔍 Checking env files differences..."
 
 for ENV_FILE in "${ENV_FILES[@]}"; do
+
+  if [ ! -f "./$ENV_FILE" ]; then
+    echo "$ENV_FILE not found in local."
+    continue
+  fi
+
   LOCAL_FILE="$ENV_FILE"
   REMOTE_FILE="$VPS_PATH/$ENV_FILE"
   TEMP_FILE="/tmp/$(basename $ENV_FILE)_temp"
 
-  echo "➡️  Checking $ENV_FILE..."
+  echo "Checking $ENV_FILE..."
 
   scp -i "$SSH_KEY" "$VPS_USER@$VPS_HOST:$REMOTE_FILE" "$TEMP_FILE" > /dev/null 2>&1 || true
 
   if diff -q "$LOCAL_FILE" "$TEMP_FILE" >/dev/null 2>&1; then
-    echo "✅ $ENV_FILE is up to date — skipping sync."
+    echo "$ENV_FILE is up to date — skipping sync."
   else
-    echo "⚠️  $ENV_FILE differs — syncing new version..."
+    echo "$ENV_FILE differs — syncing new version..."
     ssh -i "$SSH_KEY" "$VPS_USER@$VPS_HOST" "rm -f $REMOTE_FILE"
     scp -i "$SSH_KEY" "$LOCAL_FILE" "$VPS_USER@$VPS_HOST:$REMOTE_FILE" >/dev/null 2>&1
-    echo "📤 Synced $ENV_FILE successfully."
+    echo "Synced $ENV_FILE successfully."
   fi
 
   rm -f "$TEMP_FILE"
 done
 
-echo "🎉 All env files are up-to-date."
+echo "All env files are up-to-date."
