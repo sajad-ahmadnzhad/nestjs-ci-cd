@@ -2,7 +2,6 @@ FROM node:alpine
 
 WORKDIR /app
 
-
 COPY package*.json .
 
 COPY pnpm-lock.yaml .
@@ -13,4 +12,4 @@ COPY . .
 
 EXPOSE 4000
 
-CMD npx pnpm start:dev
+CMD npx prisma generate && npx prisma migrate deploy && npx pnpm start:dev
