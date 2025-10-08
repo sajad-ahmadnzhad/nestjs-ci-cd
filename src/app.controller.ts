@@ -10,6 +10,17 @@ export class AppController {
     return [{ id: 1, title: 'product 1', description: 'my product' }];
   }
 
+  @Get('/list/name')
+  listOfNames() {
+    
+    
+    return this.appService.getNewNames()
+
+    
+
+
+  }
+
   @Get()
   getHello(): string {
     return this.appService.getHello();
