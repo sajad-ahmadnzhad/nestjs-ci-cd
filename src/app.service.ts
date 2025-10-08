@@ -7,10 +7,6 @@ export class AppService {
   }
 
   getNewNames() {
-
-
     return ['sajad', 'ali', 'ahmad', 'mmd'];
-  
-  
   }
 }
