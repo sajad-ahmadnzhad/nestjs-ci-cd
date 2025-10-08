@@ -7,11 +7,7 @@ export class AppController {
 
   @Get('/list')
   listOfProducts() {
-
-
     return [{ id: 1, title: 'product 1', description: 'my product' }];
-  
-  
   }
 
   @Get('/list/name')
