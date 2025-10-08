@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+[ "$CI" = "true" ] && echo "🚀 Skipping Husky in CI/CD" && exit 0
 . "$(dirname "$0")/_/husky.sh"
 
 echo "compare-env file is Running...."
