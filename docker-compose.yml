@@ -1,0 +1,15 @@
+services:
+  backend: 
+    container_name: backend
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./src:/app/src
+    networks:
+      - app
+
+networks:
+  app: 
+    driver: bridge
