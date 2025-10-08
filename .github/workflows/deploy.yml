@@ -20,6 +20,29 @@ jobs:
       - name: Install dependencies
         run: npx pnpm install
 
+      - name: Format and Lint Codes
+        run: npx pnpm format & npx pnpm lint
+
+      - name: Check for Formatting Changes
+        run: |
+            if ! git diff --quiet; then
+             echo "needs_commit=true" >> $GITHUB_ENV
+            else 
+              echo "needs_commit=false" >> $GITHUB_ENV
+            fi
+            
+      - name: Set git identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit Formatting Changes
+        if: env.needs_commit == 'true'
+        run: |
+          git add .
+          git commit -am "Auto-format code in ci cd project"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
       - name: Run prisma generate
         run: npx pnpm prisma generate
 
