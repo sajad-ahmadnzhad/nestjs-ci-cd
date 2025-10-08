@@ -3,18 +3,32 @@ set -e
 
 VPS_USER="root"
 VPS_HOST="194.33.105.122"
-VPS_PATH="./nestjs-ci-cd/.env"
+VPS_PATH="./nestjs-ci-cd"
 SSH_KEY="../../shopinka-vps-private-key"
 
-echo "🔍 Checking if local .env differs from VPS..."
+ENV_FILES=(".env" ".env.docker")
 
-scp -i $SSH_KEY $VPS_USER@$VPS_HOST:$VPS_PATH /tmp/vps_env_temp > /dev/null 2>&1 || true
+echo "🔍 Checking env files differences..."
 
-if diff -q .env /tmp/vps_env_temp >/dev/null 2>&1; then
-  echo ".env files are identical — skipping sync."
-else
-  echo ".env files differ — syncing new version..."
-  bash scripts/sync-env.sh
-fi
+for ENV_FILE in "${ENV_FILES[@]}"; do
+  LOCAL_FILE="$ENV_FILE"
+  REMOTE_FILE="$VPS_PATH/$ENV_FILE"
+  TEMP_FILE="/tmp/$(basename $ENV_FILE)_temp"
 
-rm -f /tmp/vps_env_temp
+  echo "➡️  Checking $ENV_FILE..."
+
+  scp -i "$SSH_KEY" "$VPS_USER@$VPS_HOST:$REMOTE_FILE" "$TEMP_FILE" > /dev/null 2>&1 || true
+
+  if diff -q "$LOCAL_FILE" "$TEMP_FILE" >/dev/null 2>&1; then
+    echo "✅ $ENV_FILE is up to date — skipping sync."
+  else
+    echo "⚠️  $ENV_FILE differs — syncing new version..."
+    ssh -i "$SSH_KEY" "$VPS_USER@$VPS_HOST" "rm -f $REMOTE_FILE"
+    scp -i "$SSH_KEY" "$LOCAL_FILE" "$VPS_USER@$VPS_HOST:$REMOTE_FILE" >/dev/null 2>&1
+    echo "📤 Synced $ENV_FILE successfully."
+  fi
+
+  rm -f "$TEMP_FILE"
+done
+
+echo "🎉 All env files are up-to-date."

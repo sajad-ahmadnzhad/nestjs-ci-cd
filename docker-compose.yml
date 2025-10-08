@@ -10,6 +10,21 @@ services:
     networks:
       - app
 
+  backend_db:
+    container_name: backend_db
+    image: postgres:17
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT-5432}
+    env_file:
+      - .env.docker
+    volumes:
+      - backend_db_data:/var/lib/postgresql/data
+    networks:
+      - app
+
+volumes:
+  backend_db_data:
+
 networks:
   app: 
     driver: bridge
