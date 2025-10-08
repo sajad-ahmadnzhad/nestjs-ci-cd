@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ کلون کردن پروژه
       - name: Checkout code
         uses: actions/checkout@v4
 
