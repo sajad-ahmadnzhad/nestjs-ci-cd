@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "compare-env file is Running...."
+bash scripts/compare-env.sh
+echo "completed compare-env file."
